@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=no"
+    />
+    <title>Sic Parvis Magna</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Crimson+Text:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        width: 100vw;
+        height: 100vh;
+        overflow: hidden;
+        background: #0a0806;
+        font-family: "Crimson Text", "Georgia", serif;
+        color: #d4c5a9;
+        position: relative;
+        overscroll-behavior: none;
+      }
+
+      html {
+        overflow: hidden;
+        height: 100%;
+        position: relative;
+        width: 100%;
+      }
+
+      /* Fondo mejorado - más vivo */
+      .camara {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(
+            ellipse at 50% 40%,
+            rgba(80, 50, 30, 0.35) 0%,
+            transparent 50%
+          ),
+          radial-gradient(
+            ellipse at 30% 70%,
+            rgba(60, 35, 15, 0.25) 0%,
+            transparent 45%
+          ),
+          radial-gradient(
+            ellipse at 70% 60%,
+            rgba(70, 45, 20, 0.25) 0%,
+            transparent 50%
+          ),
+          linear-gradient(
+            180deg,
+            #0a0806 0%,
+            #1a1410 40%,
+            #221a14 60%,
+            #0a0806 100%
+          );
+      }
+
+      /* Viñeta sutil */
+      .vignette {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(
+          ellipse at center,
+          transparent 40%,
+          rgba(0, 0, 0, 0.6) 100%
+        );
+        pointer-events: none;
+      }
+
+      /* Resplandores cálidos múltiples */
+      .resplandor {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 90%;
+        height: 90%;
+        background: radial-gradient(
+          ellipse at center,
+          rgba(255, 140, 60, 0.12) 0%,
+          rgba(255, 200, 150, 0.06) 30%,
+          transparent 65%
+        );
+        pointer-events: none;
+        animation: parpadeoLento 8s ease-in-out infinite;
+      }
+
+      .resplandor-secundario {
+        position: fixed;
+        top: 60%;
+        left: 40%;
+        width: 60%;
+        height: 60%;
+        background: radial-gradient(
+          ellipse at center,
+          rgba(200, 150, 100, 0.08) 0%,
+          transparent 60%
+        );
+        pointer-events: none;
+        animation: parpadeoLento 10s ease-in-out infinite 2s;
+      }
+
+      @keyframes parpadeoLento {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.7;
+        }
+      }
+
+      /* Contenedor del objeto 3D */
+      .contenedor-anillo {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: min(85vw, 85vh);
+        height: min(85vw, 85vh);
+        max-width: 550px;
+        max-height: 550px;
+        z-index: 10;
+        cursor: grab;
+      }
+
+      .contenedor-anillo:active {
+        cursor: grabbing;
+      }
+
+      /* Velo inicial */
+      .velo {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: #000;
+        z-index: 1000;
+        animation: levantarVelo 3s ease-out forwards;
+      }
+
+      @keyframes levantarVelo {
+        to {
+          opacity: 0;
+          pointer-events: none;
+        }
+      }
+
+      /* Partículas de polvo más lentas y sutiles */
+      .polvo {
+        position: fixed;
+        width: 2px;
+        height: 2px;
+        background: rgb(255, 255, 255);
+        border-radius: 50%;
+        pointer-events: none;
+        animation: flotarLento 25s linear infinite;
+      }
+
+      @keyframes flotarLento {
+        0% {
+          transform: translateY(110vh) translateX(0) scale(0.8);
+          opacity: 0;
+        }
+        15% {
+          opacity: 0.4;
+        }
+        85% {
+          opacity: 0.4;
+        }
+        100% {
+          transform: translateY(-10vh) translateX(40px) scale(1.2);
+          opacity: 0;
+        }
+      }
+
+      /* TEXTO SUPERIOR */
+      .texto-superior {
+        position: fixed;
+        /* 
+          AJUSTAR DISTANCIA DESDE ARRIBA:
+          - Aumenta los valores para bajar el texto
+          - Disminuye los valores para subirlo más
+          Formato: clamp(mínimo, preferido, máximo)
+        */
+        top: clamp(30px, 5vh, 60px);
+        left: 50%;
+        transform: translateX(-50%);
+        text-align: center;
+        z-index: 50;
+        pointer-events: none;
+        opacity: 0;
+        animation: aparecer 3s ease-out 3.5s forwards;
+      }
+
+      .texto-superior h1 {
+        font-family: "Cinzel", serif;
+        /* 
+          AJUSTAR TAMAÑO DEL TÍTULO:
+          Formato: clamp(tamaño-móvil, tamaño-flexible, tamaño-escritorio)
+        */
+        font-size: clamp(1.5rem, 4vw, 2.5rem);
+        font-weight: 500;
+        letter-spacing: 0.15em;
+        color: #f4e4c1;
+        text-shadow: 0 2px 20px rgba(0, 0, 0, 0.8),
+          0 0 30px rgba(255, 140, 60, 0.2);
+        margin: 0;
+      }
+
+      /* TEXTO INFERIOR ULTRA COMPACTO */
+      .texto-inferior {
+        position: absolute;
+        bottom: 1000px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 100%; /* Ancho completo del contenedor */
+        text-align: center;
+        z-index: 50;
+        pointer-events: none;
+        opacity: 0;
+        animation: aparecer 3s ease-out 5s forwards;
+      }
+
+      .texto-inferior p {
+        display: block;
+        width: 100%;
+        margin: 0;
+        padding: 0 20px; /* Padding para que no esté pegado a los bordes */
+        font-family: "Crimson Text", serif;
+        font-size: clamp(1rem, 2.2vw, 1.35rem);
+        line-height: 1.8;
+        letter-spacing: 0.03em;
+        color: #d4c5a9;
+        text-shadow: 0 2px 15px rgba(0, 0, 0, 0.9);
+        font-weight: 400;
+        text-align: center;
+        box-sizing: border-box; /* Incluye el padding en el ancho */
+      }
+
+      @keyframes aparecer {
+        from {
+          opacity: 0;
+          transform: translateX(-50%) translateY(15px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(-50%) translateY(0);
+        }
+      }
+
+      /* BOTÓN DE MÚSICA */
+      .boton-musica {
+        position: fixed;
+        bottom: clamp(20px, 3vh, 35px);
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 100;
+        padding: clamp(10px, 2vh, 14px) clamp(20px, 4vw, 30px);
+        background: rgba(20, 15, 10, 0.85);
+        border: 1px solid rgba(212, 197, 169, 0.3);
+        border-radius: 50px;
+        color: #d4c5a9;
+        font-family: "Crimson Text", serif;
+        font-size: clamp(0.9rem, 2vw, 1.1rem);
+        cursor: pointer;
+        transition: all 0.4s ease;
+        backdrop-filter: blur(10px);
+        letter-spacing: 0.05em;
+        opacity: 0;
+        animation: aparecer 2s ease-out 6.5s forwards;
+      }
+
+      .boton-musica:hover {
+        background: rgba(30, 22, 15, 0.95);
+        border-color: rgba(212, 197, 169, 0.5);
+        transform: translateX(-50%) translateY(-2px);
+      }
+
+      .boton-musica.reproduciendo {
+        background: rgba(40, 30, 20, 0.95);
+        border-color: rgba(255, 200, 150, 0.6);
+        box-shadow: 0 0 30px rgba(255, 140, 60, 0.3),
+          0 0 60px rgba(255, 140, 60, 0.15);
+        animation: pulsoMusica 2s ease-in-out infinite;
+      }
+
+      @keyframes pulsoMusica {
+        0%,
+        100% {
+          box-shadow: 0 0 30px rgba(255, 140, 60, 0.3),
+            0 0 60px rgba(255, 140, 60, 0.15);
+        }
+        50% {
+          box-shadow: 0 0 40px rgba(255, 140, 60, 0.4),
+            0 0 80px rgba(255, 140, 60, 0.2);
+        }
+      }
+
+      /* Responsive ajustes */
+      @media (max-width: 768px) {
+        .texto-inferior {
+          /* 
+            AJUSTAR DISTANCIA DESDE ABAJO EN MÓVIL:
+            - Aumenta los valores para subir el texto en móviles
+            - Disminuye para bajarlo más
+          */
+          bottom: clamp(100px, 15vh, 160px);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="velo"></div>
+    <div class="camara"></div>
+    <div class="vignette"></div>
+    <div class="resplandor"></div>
+    <div class="resplandor-secundario"></div>
+
+    <!-- Texto superior -->
+    <div class="texto-superior">
+      <h1>Sic Parvis Magna</h1>
+    </div>
+
+    <!-- Contenedor Three.js -->
+    <div class="contenedor-anillo" id="contenedor-tres"></div>
+
+    <!-- Texto inferior -->
+    <div class="texto-inferior">
+      <p>
+        La grandeza está en los pequeños momentos. Cada instante contigo es un
+        tesoro. Este anillo es el inicio de nuestras aventuras. Donde estés, ahí
+        está mi hogar. Feliz cumpleaños, Paula.
+      </p>
+    </div>
+
+    <!-- Botón de música -->
+    <button class="boton-musica" id="botonMusica">🎵 Reproducir música</button>
+
+    <!-- Audio (The Last of Us Theme) -->
+    <audio id="musica" loop>
+      <source src="TheLastOfUsTheme.mp3" type="audio/mpeg" />
+    </audio>
+
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://cdn.skypack.dev/three@0.128.0",
+          "three/examples/jsm/loaders/GLTFLoader": "https://cdn.skypack.dev/three@0.128.0/examples/jsm/loaders/GLTFLoader.js",
+          "three/examples/jsm/controls/OrbitControls": "https://cdn.skypack.dev/three@0.128.0/examples/jsm/controls/OrbitControls.js"
+        }
+      }
+    </script>
+
+    <script type="module">
+      import * as THREE from "three";
+      import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
+      import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+
+      // ====== CONTROL DE MÚSICA ======
+      const musica = document.getElementById("musica");
+      const botonMusica = document.getElementById("botonMusica");
+      let musicaReproduciendo = false;
+
+      botonMusica.addEventListener("click", () => {
+        if (musicaReproduciendo) {
+          musica.pause();
+          botonMusica.textContent = "🎵 Reproducir música";
+          botonMusica.classList.remove("reproduciendo");
+          musicaReproduciendo = false;
+        } else {
+          musica.play().catch((err) => {
+            console.log("Error reproduciendo audio:", err);
+          });
+          botonMusica.textContent = "⏸️ Pausar música";
+          botonMusica.classList.add("reproduciendo");
+          musicaReproduciendo = true;
+        }
+      });
+
+      // ====== BLOQUEO DE SCROLL ======
+      const contenedor = document.getElementById("contenedor-tres");
+
+      window.addEventListener("keydown", (e) => {
+        if (
+          [
+            "ArrowUp",
+            "ArrowDown",
+            "Space",
+            "PageUp",
+            "PageDown",
+            "Home",
+            "End",
+          ].includes(e.key)
+        ) {
+          e.preventDefault();
+        }
+      });
+
+      document.body.addEventListener("scroll", (e) => e.preventDefault());
+
+      document.addEventListener(
+        "wheel",
+        (e) => {
+          if (!contenedor.contains(e.target)) {
+            e.preventDefault();
+          }
+        },
+        { passive: false }
+      );
+
+      document.addEventListener(
+        "touchmove",
+        (e) => {
+          if (!contenedor.contains(e.target)) {
+            e.preventDefault();
+          }
+        },
+        { passive: false }
+      );
+
+      // ====== CONFIGURACIÓN THREE.JS ======
+      const escena = new THREE.Scene();
+
+      const camara = new THREE.PerspectiveCamera(
+        45,
+        contenedor.clientWidth / contenedor.clientHeight,
+        0.1,
+        200
+      );
+      camara.position.set(0, 0, 80);
+
+      const renderizador = new THREE.WebGLRenderer({
+        alpha: true,
+        antialias: true,
+      });
+      renderizador.setSize(contenedor.clientWidth, contenedor.clientHeight);
+      renderizador.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      renderizador.outputColorSpace = THREE.SRGBColorSpace;
+      renderizador.toneMapping = THREE.ACESFilmicToneMapping;
+      renderizador.toneMappingExposure = 1.2;
+
+      contenedor.appendChild(renderizador.domElement);
+
+      // ====== CONTROLES CON AERODINÁMICA ======
+      const controles = new OrbitControls(camara, renderizador.domElement);
+      controles.enableDamping = true;
+      controles.dampingFactor = 0.03;
+      controles.enablePan = false;
+      controles.enableZoom = false;
+      controles.rotateSpeed = 0.8;
+      controles.autoRotate = true;
+      controles.autoRotateSpeed = 0.3;
+      controles.minPolarAngle = 0;
+      controles.maxPolarAngle = Math.PI;
+      controles.touches = {
+        ONE: THREE.TOUCH.ROTATE,
+        TWO: THREE.TOUCH.ROTATE,
+      };
+
+      // ====== ILUMINACIÓN ======
+      const luzAmbiental = new THREE.AmbientLight(0xffffff, 0.2);
+      escena.add(luzAmbiental);
+
+      const luzHemisferica = new THREE.HemisphereLight(0xffffff, 0x444444, 0.5);
+      luzHemisferica.position.set(0, 50, 0);
+      escena.add(luzHemisferica);
+
+      const luzPrincipal = new THREE.DirectionalLight(0xffffff, 0.8);
+      luzPrincipal.position.set(10, 10, 10);
+      escena.add(luzPrincipal);
+
+      const luzRelleno = new THREE.DirectionalLight(0xffffff, 0.5);
+      luzRelleno.position.set(-10, 5, -10);
+      escena.add(luzRelleno);
+
+      const luzDerecha = new THREE.DirectionalLight(0xffffff, 0.5);
+      luzDerecha.position.set(10, 0, -5);
+      escena.add(luzDerecha);
+
+      const luzInferior = new THREE.DirectionalLight(0xffffff, 0.4);
+      luzInferior.position.set(0, -10, 0);
+      escena.add(luzInferior);
+
+      // ====== CARGA DEL MODELO 3D ======
+      const cargador = new GLTFLoader();
+      let anillo;
+
+      cargador.load(
+        "./sic_parvis_magna_ring.glb",
+        (gltf) => {
+          anillo = gltf.scene;
+
+          anillo.traverse((hijo) => {
+            if (hijo.isMesh && hijo.material) {
+              if (Array.isArray(hijo.material)) {
+                hijo.material.forEach((mat) => {
+                  mat.side = THREE.DoubleSide;
+                  mat.emissive = mat.color.clone();
+                  mat.needsUpdate = true;
+                });
+              } else {
+                hijo.material.side = THREE.DoubleSide;
+                hijo.material.metalness = 2;
+                hijo.material.roughness = 1.85;
+                hijo.material.emissive = hijo.material.color.clone();
+                hijo.material.emissiveIntensity = 0.35;
+                hijo.material.needsUpdate = true;
+              }
+            }
+          });
+
+          anillo.scale.set(0.4, 0.4, 0.4);
+          escena.add(anillo);
+        },
+        undefined,
+        (error) => console.error("Error cargando modelo:", error)
+      );
+
+      // ====== ANIMACIÓN ======
+      function animar() {
+        requestAnimationFrame(animar);
+        controles.update();
+        renderizador.render(escena, camara);
+      }
+      animar();
+
+      // ====== RESPONSIVE ======
+      window.addEventListener("resize", () => {
+        camara.aspect = contenedor.clientWidth / contenedor.clientHeight;
+        camara.updateProjectionMatrix();
+        renderizador.setSize(contenedor.clientWidth, contenedor.clientHeight);
+        renderizador.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      });
+
+      // ====== PARTÍCULAS DE POLVO ======
+      for (let i = 0; i < 20; i++) {
+        const particula = document.createElement("div");
+        particula.className = "polvo";
+        particula.style.left = Math.random() * 100 + "%";
+        particula.style.animationDelay = Math.random() * 25 + "s";
+        particula.style.animationDuration = 20 + Math.random() * 15 + "s";
+        document.body.appendChild(particula);
+      }
+    </script>
+  </body>
+</html>
