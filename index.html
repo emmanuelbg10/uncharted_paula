@@ -6,7 +6,7 @@
       name="viewport"
       content="width=device-width, initial-scale=1.0, user-scalable=no"
     />
-    <title>Sic Parvis Magna</title>
+    <title>FELIZ CUMPLEAÑOS PAULA</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -195,12 +195,6 @@
       /* TEXTO SUPERIOR */
       .texto-superior {
         position: fixed;
-        /* 
-          AJUSTAR DISTANCIA DESDE ARRIBA:
-          - Aumenta los valores para bajar el texto
-          - Disminuye los valores para subirlo más
-          Formato: clamp(mínimo, preferido, máximo)
-        */
         top: clamp(30px, 5vh, 60px);
         left: 50%;
         transform: translateX(-50%);
@@ -208,15 +202,11 @@
         z-index: 50;
         pointer-events: none;
         opacity: 0;
-        animation: aparecer 3s ease-out 3.5s forwards;
+        animation: aparecer 1.5s ease-out 1s forwards;
       }
 
       .texto-superior h1 {
         font-family: "Cinzel", serif;
-        /* 
-          AJUSTAR TAMAÑO DEL TÍTULO:
-          Formato: clamp(tamaño-móvil, tamaño-flexible, tamaño-escritorio)
-        */
         font-size: clamp(1.5rem, 4vw, 2.5rem);
         font-weight: 500;
         letter-spacing: 0.15em;
@@ -226,25 +216,25 @@
         margin: 0;
       }
 
-      /* TEXTO INFERIOR ULTRA COMPACTO */
+      /* TEXTO INFERIOR - CORREGIDO PARA LLEGAR A LOS BORDES EN MÓVIL */
       .texto-inferior {
         position: absolute;
-        bottom: 1000px;
+        bottom: clamp(80px, 12vh, 140px);
         left: 50%;
         transform: translateX(-50%);
-        width: 100%; /* Ancho completo del contenedor */
+        width: 100%;
         text-align: center;
         z-index: 50;
         pointer-events: none;
         opacity: 0;
-        animation: aparecer 3s ease-out 5s forwards;
+        animation: aparecer 1.5s ease-out 2s forwards;
       }
 
       .texto-inferior p {
         display: block;
         width: 100%;
         margin: 0;
-        padding: 0 20px; /* Padding para que no esté pegado a los bordes */
+        padding: 0 20px;
         font-family: "Crimson Text", serif;
         font-size: clamp(1rem, 2.2vw, 1.35rem);
         line-height: 1.8;
@@ -253,7 +243,7 @@
         text-shadow: 0 2px 15px rgba(0, 0, 0, 0.9);
         font-weight: 400;
         text-align: center;
-        box-sizing: border-box; /* Incluye el padding en el ancho */
+        box-sizing: border-box;
       }
 
       @keyframes aparecer {
@@ -267,10 +257,11 @@
         }
       }
 
-      /* BOTÓN DE MÚSICA */
+      /* BOTÓN DE MÚSICA - CORREGIDO */
       .boton-musica {
         position: fixed;
-        bottom: clamp(20px, 3vh, 35px);
+        bottom: clamp(50px, 6vh, 50px);
+
         left: 50%;
         transform: translateX(-50%);
         z-index: 100;
@@ -287,6 +278,11 @@
         letter-spacing: 0.05em;
         opacity: 0;
         animation: aparecer 2s ease-out 6.5s forwards;
+        /* Eliminar efectos predeterminados del navegador */
+        outline: none;
+        -webkit-tap-highlight-color: transparent;
+        user-select: none;
+        -webkit-user-select: none;
       }
 
       .boton-musica:hover {
@@ -295,12 +291,31 @@
         transform: translateX(-50%) translateY(-2px);
       }
 
+      /* Evitar cambios de color al hacer click */
+      .boton-musica:focus,
+      .boton-musica:active {
+        outline: none;
+        background: rgba(20, 15, 10, 0.85);
+        border-color: rgba(212, 197, 169, 0.3);
+      }
+
+      .boton-musica:active {
+        transform: translateX(-50%) translateY(0px);
+      }
+
       .boton-musica.reproduciendo {
-        background: rgba(40, 30, 20, 0.95);
-        border-color: rgba(255, 200, 150, 0.6);
+        background: rgba(40, 30, 20, 0.95) !important;
+        border-color: rgba(255, 200, 150, 0.6) !important;
         box-shadow: 0 0 30px rgba(255, 140, 60, 0.3),
           0 0 60px rgba(255, 140, 60, 0.15);
-        animation: pulsoMusica 2s ease-in-out infinite;
+        animation: pulsoMusica 2s ease-in-out infinite,
+          aparecer 2s ease-out 6.5s forwards;
+      }
+
+      .boton-musica.reproduciendo:focus,
+      .boton-musica.reproduciendo:active {
+        background: rgba(40, 30, 20, 0.95) !important;
+        border-color: rgba(255, 200, 150, 0.6) !important;
       }
 
       @keyframes pulsoMusica {
@@ -315,15 +330,15 @@
         }
       }
 
-      /* Responsive ajustes */
+      /* Responsive ajustes para móvil */
       @media (max-width: 768px) {
         .texto-inferior {
-          /* 
-            AJUSTAR DISTANCIA DESDE ABAJO EN MÓVIL:
-            - Aumenta los valores para subir el texto en móviles
-            - Disminuye para bajarlo más
-          */
-          bottom: clamp(100px, 15vh, 160px);
+          width: 100vw;
+          bottom: clamp(190px, 23.5vh, 240px);
+        }
+
+        .texto-inferior p {
+          padding: 0 15px;
         }
       }
     </style>
@@ -346,9 +361,8 @@
     <!-- Texto inferior -->
     <div class="texto-inferior">
       <p>
-        La grandeza está en los pequeños momentos. Cada instante contigo es un
-        tesoro. Este anillo es el inicio de nuestras aventuras. Donde estés, ahí
-        está mi hogar. Feliz cumpleaños, Paula.
+        La grandeza está en los pequeños momentos. Este anillo inicia nuestras
+        aventuras. Donde estés, ahí está mi hogar. Feliz cumpleaños, Paula.
       </p>
     </div>
 
@@ -383,7 +397,9 @@
       const botonMusica = document.getElementById("botonMusica");
       let musicaReproduciendo = false;
 
-      botonMusica.addEventListener("click", () => {
+      botonMusica.addEventListener("click", (e) => {
+        e.preventDefault();
+
         if (musicaReproduciendo) {
           musica.pause();
           botonMusica.textContent = "🎵 Reproducir música";
@@ -397,6 +413,9 @@
           botonMusica.classList.add("reproduciendo");
           musicaReproduciendo = true;
         }
+
+        // Quitar el focus del botón después del click
+        botonMusica.blur();
       });
 
       // ====== BLOQUEO DE SCROLL ======
@@ -522,7 +541,7 @@
                 });
               } else {
                 hijo.material.side = THREE.DoubleSide;
-                hijo.material.metalness = 2;
+                hijo.material.metalness = 2.12;
                 hijo.material.roughness = 1.85;
                 hijo.material.emissive = hijo.material.color.clone();
                 hijo.material.emissiveIntensity = 0.35;
