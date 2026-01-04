@@ -219,7 +219,7 @@
       /* TEXTO INFERIOR - CORREGIDO PARA LLEGAR A LOS BORDES EN MÓVIL */
       .texto-inferior {
         position: absolute;
-        bottom: clamp(80px, 12vh, 140px);
+        bottom: clamp(75px, 13vh, 100px);
         left: 50%;
         transform: translateX(-50%);
         width: 100%;
@@ -277,7 +277,8 @@
         backdrop-filter: blur(10px);
         letter-spacing: 0.05em;
         opacity: 0;
-        animation: aparecer 2s ease-out 6.5s forwards;
+        animation: aparecer 2s ease-out 4s forwards;
+        pointer-events: none;
         /* Eliminar efectos predeterminados del navegador */
         outline: none;
         -webkit-tap-highlight-color: transparent;
@@ -334,7 +335,7 @@
       @media (max-width: 768px) {
         .texto-inferior {
           width: 100vw;
-          bottom: clamp(190px, 23.5vh, 240px);
+          bottom: clamp(180px, 22vh, 230px);
         }
 
         .texto-inferior p {
@@ -582,6 +583,12 @@
         particula.style.animationDuration = 20 + Math.random() * 15 + "s";
         document.body.appendChild(particula);
       }
+
+      botonMusica.addEventListener("animationend", (e) => {
+        if (e.animationName === "aparecer") {
+          botonMusica.style.pointerEvents = "auto"; // ⬅ habilita clicks
+        }
+      });
     </script>
   </body>
 </html>
